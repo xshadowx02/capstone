@@ -8,10 +8,11 @@ from functools import lru_cache
 from typing import List, Tuple
 
 from guardrails import Guard
-from guardrails_ai.detect_jailbreak import DetectJailbreak
-from guardrails_ai.unusual_prompt import UnusualPrompt
+from guardrails.settings import settings as guardrails_settings
 
 from config import settings
+
+guardrails_settings.rc.enable_metrics = False
 
 # Forbidden patterns
 PROMPT_INJECTION_PATTERNS: List[re.Pattern] = [
@@ -39,6 +40,9 @@ SUSPICIOUS_LENGTH_THRESHOLD = 1000
 
 @lru_cache(maxsize=1)
 def _get_guard() -> Guard:
+    from guardrails_ai.detect_jailbreak import DetectJailbreak
+    from guardrails_ai.unusual_prompt import UnusualPrompt
+
     os.environ.setdefault("OLLAMA_API_BASE", settings.ollama_host)
     return Guard().use(
         DetectJailbreak(),

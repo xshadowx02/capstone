@@ -91,7 +91,7 @@ async def categorize_transaction(
 
     # 3. RAG retrieval
     try:
-        similar = await rag_service.search(safe_text, top_k=10)
+        similar = await rag_service.search(safe_text, top_k=5)
         rag_context = "\n".join(
             f"- '{ex['text']}' -> {ex['category']} / {ex['subcategory']} (similarity: {ex['score']:.3f})"
             for ex in similar

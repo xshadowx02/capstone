@@ -40,3 +40,8 @@ The application is structured to execute seamlessly as a sandboxed local environ
 * **Financial Hallucinations:** Large language models are prone to hallucinating numerical values or fabricating fake transaction visits. **Guardrail:** The system systemically isolates the LLM from executing raw math. The LLM's role is strictly restricted to defining filter parameters (e.g., dates, merchant classes) passed to structured python math tools, which output deterministic financial balances.
 * **Local Hardware Bottlenecks:** Heavy models can choke local processing units, leading to high response latency and friction. **Guardrail:** Utilizing highly compressed, hyper-efficient quantized models via Ollama to maximize tokens-per-second on non-workstation chips.
 * **Malicious Injections:** Guarding local file directories against prompt manipulation threats trying to invoke unauthorized local terminal execution or read sensitive system paths. **Guardrail:** Enforcing rigorous structural output schemas (JSON enforcement) and sandboxing local tool permissions to prevent arbitrary system commands.
+
+### Limitations
+1. It can only handle a maximum of 200 rows of input for the context
+2. Performance is not yet optimized. It takes > 30 seconds to respond to queries even with using the smaller gemma:e2b model.
+3. Versions orginally called ollama installed on windows but shifted to docker to allow for portability. 
