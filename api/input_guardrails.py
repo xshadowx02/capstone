@@ -7,12 +7,6 @@ import re
 from functools import lru_cache
 from typing import List, Tuple
 
-from guardrails import Guard
-from guardrails.settings import settings as guardrails_settings
-
-from config import settings
-
-guardrails_settings.rc.enable_metrics = False
 
 # Forbidden patterns
 PROMPT_INJECTION_PATTERNS: List[re.Pattern] = [
@@ -38,17 +32,6 @@ PROMPT_INJECTION_PATTERNS: List[re.Pattern] = [
 
 SUSPICIOUS_LENGTH_THRESHOLD = 1000
 
-@lru_cache(maxsize=1)
-def _get_guard() -> Guard:
-    from guardrails_ai.detect_jailbreak import DetectJailbreak
-    from guardrails_ai.unusual_prompt import UnusualPrompt
-
-    os.environ.setdefault("OLLAMA_API_BASE", settings.ollama_host)
-    return Guard().use(
-        DetectJailbreak(),
-        UnusualPrompt(llm_callable=f"ollama/{settings.chat_model}"),
-    )
-
 
 def check_guardrails(text: str) -> Tuple[bool, List[str]]:
     """Returns whether text passed checks and any corresponding flags."""
@@ -71,14 +54,6 @@ def check_guardrails(text: str) -> Tuple[bool, List[str]]:
 
     if flags:
         return False, flags
-
-    try:
-        outcome = _get_guard().validate(text)
-    except Exception as exc:
-        return False, [f"VALIDATOR_ERROR:{type(exc).__name__}"]
-
-    if not outcome.validation_passed:
-        flags.append("PROMPT_VALIDATION_FAILED")
 
     return len(flags) == 0, flags
 

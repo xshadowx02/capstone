@@ -1,11 +1,6 @@
-from config import Settings
+# Abstraction layer to enable easy replacement of LLM calls
 
-global_setting = Settings()
-
-if global_setting.llm_backend == "openrouter":
-    from . import openrouter as _backend
-else:
-    from . import ollama as _backend
+from . import ollama as _backend
 
 health = _backend.health
 embed = _backend.embed
