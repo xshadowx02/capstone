@@ -17,51 +17,6 @@ async def health() -> bool:
     except Exception as e:
         print(f"Health check failed: {e}")
         return False
-
-async def classify(
-    merchant: str,
-    model: str = global_setting.chat_model,
-    categories: list[str] | None = None,
-    evidence: list | dict | None = None,
-) -> dict:
-    if not categories:
-        raise ValueError("At least one category is required")
-
-    prompt = (
-        f"Classify the merchant {json.dumps(merchant)} into exactly one allowed category.\n"
-        f"Allowed categories: {', '.join(categories)}\n"
-        f"Evidence: {json.dumps(evidence or [])}\n"
-        'Reply only with JSON in this format: '
-        '{"category": "one allowed category", "confidence": 0.0, "reason": "short reason"}'
-    )
-        
-    payload = {
-        "model": global_setting.chat_model,
-        "prompt": prompt,
-        "stream": False,
-        "think": False,
-        "raw": False,
-    }
-
-    async with httpx.AsyncClient(timeout=120) as client:
-        response = await client.post(f"{global_setting.ollama_host}/api/generate",json=payload)
-        response.raise_for_status()
-
-    result = json.loads(response.json().get("response", ""))
-    category = result.get("category")
-    if category not in categories:
-        raise ValueError(f"Model returned an invalid category: {category!r}")
-
-    try:
-        confidence = max(0.0, min(1.0, float(result.get("confidence", 0.0))))
-    except (TypeError, ValueError):
-        confidence = 0.0
-    return {
-        "category": category,
-        "confidence": confidence,
-        "reason": str(result.get("reason", "")),
-    }
-
     
 async def answer (prompt:str) -> str:
     client_factory = cast(Any, httpx).AsyncClient

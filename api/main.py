@@ -46,7 +46,7 @@ app.include_router(rankings.router)
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "service": "Local Ledge"}
+    return {"status": "ok", "service": "Local Ledger"}
 
 
 static_dir = "/app/static"
@@ -62,4 +62,4 @@ if os.path.exists(static_dir):
 else:
     @app.get("/")
     async def root():
-        return {"message": "Local Ledge API", "docs": "/docs"}
+        return {"message": "Local Ledger API", "docs": "/docs"}

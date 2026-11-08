@@ -1,11 +1,11 @@
 """
-Categorizer -- uses RAG context + OpenRouter LLM to classify statement lines.
+Categorizer -- uses RAG context + LLM to classify statement lines.
 Includes an evaluation step that scores the categorization quality.
 """
 import json
 from llm import llm_client
 from config import settings
-from guardrails import check_guardrails, sanitize_for_llm
+from input_guardrails import check_guardrails, sanitize_for_llm
 from rag import rag_service
 import logging
 
@@ -41,10 +41,10 @@ You will be given:
 
 Respond ONLY with a valid JSON object in this exact format:
 {
-  "category": "<one of the allowed categories>",
-  "subcategory": "<specific subcategory>",
-  "confidence": <float 0.0-1.0>,
-  "reasoning": "<brief explanation in 1-2 sentences>"
+  "category": '<one of the allowed categories>',
+  "subcategory": '<specific subcategory>',
+  "confidence": '<float 0.0-1.0>',
+  "reasoning": '<brief explanation in 1-2 sentences>'
 }
 
 Allowed categories: {category_string}
@@ -53,7 +53,7 @@ Rules:
 - Only output JSON, no extra text
 - confidence must be a number between 0.0 and 1.0
 - Keep reasoning concise and factual
-- Use context from Philippine merchant names and Makati location"""
+- Use context from Philippine merchant names"""
 
 async def categorize_transaction(
     raw_text: str,
@@ -91,7 +91,7 @@ async def categorize_transaction(
 
     # 3. RAG retrieval
     try:
-        similar = await rag_service.search(safe_text, top_k=3)
+        similar = await rag_service.search(safe_text, top_k=10)
         rag_context = "\n".join(
             f"- '{ex['text']}' -> {ex['category']} / {ex['subcategory']} (similarity: {ex['score']:.3f})"
             for ex in similar

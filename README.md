@@ -1,13 +1,15 @@
 # 💳 Local Ledger
 
 A local, single-machine Docker app that showcases **RAG**, **guardrails**, and **evaluations** through synthetic Philippine credit card statement categorization.
+This is a practice project to implement learnings.
 
 ## Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Frontend | React 19 + Vite 6 + TypeScript + Tailwind CSS |
-| Backend | FastAPI (Python 3.12) |
+| Backend | FastAPI (Python 3.13) |
+| Guardrails | Python 3.13 |
 | Database | PostgreSQL 16 |
 | Vector DB | QDrant |
 | LLM |Ollama (gemma4:e2b) |
@@ -101,7 +103,7 @@ FastAPI :8000
 
 ## Guardrail Patterns
 
-The guardrail system (`api/guardrails.py`) blocks:
+The guardrail system (`api/input_guardrails.py`) blocks:
 
 | Type | Example |
 |------|---------|

@@ -2,8 +2,9 @@
 
 ### 1. Problem & User
 * **User Persona:** Privacy-focused individuals who want deep visibility into their personal finances without exposing sensitive financial records to external networks or corporations.
-* **Supported Workflow:** Users manually log transactions (merchant name, amount, date) into a secure local dashboard. In future iterations, this workflow will scale to parse local bank statements directly. The application provides an interactive chat interface to safely run complex queries and uncover spending patterns over time.
-* **Core Pain Point Removed:** Eliminates the uncomfortable reliance on third-party cloud apps, data aggregation platforms, or public cloud LLMs that scrape, store, or train on personal financial datasets. 
+* **Supported Workflow:** Users manually log transactions (merchant name, amount, date) into a secure local dashboard. 
+In future iterations, this workflow will scale to parse local bank statements directly. The application provides an interactive chat interface to safely run complex queries and uncover spending patterns over time.
+* **Core Pain Point Removed:** Eliminates the reliance on third-party cloud apps, data aggregation platforms, or public cloud LLMs that scrape, store, or train on personal financial datasets. 
 
 ### 2. Why Generative AI
 * **The Dynamic Data Challenge:** Transaction descriptions and merchant names are erratic and highly inconsistent (e.g., `"SQ *COFFEE SHOP LLC"` vs `"TST* COFFEE S_ANTONIO"`). Hardcoded rules, regular expressions, or static Excel formulas require endless upkeep to trap these edge cases.
@@ -11,7 +12,7 @@
 
 ### 3. Agentic Functions
 * **Retrieval-Augmented Generation (RAG):** Performs secure local vector searches across historical transaction datasets to surface relevant financial context for user queries.
-* **Memory:** Implements conversational state storage entirely in a local context buffer so the user can ask intuitive follow-up questions (e.g., *"How much did I spend there?"* followed by *"Is that more than last month?"*).
+
 
 ### 4. Data
 * **Data Sources (POC):** Relying entirely on manual user inputs mapping exact merchant identities, cost figures, and transaction timestamps.
@@ -24,7 +25,7 @@ The application is structured to execute seamlessly as a sandboxed local environ
 | Layer | Selected Technology | Operational Profile |
 | :--- | :--- | :--- |
 | **Frontend** | React 19 + Vite 6 + TypeScript + Tailwind CSS | Fast, strongly-typed user interface executing locally. |
-| **Backend** | FastAPI (Python 3.12) | Local server managing model orchestration and tool calls. |
+| **Backend** | FastAPI (Python 3.13) | Local server managing model orchestration and tool calls. |
 | **Database** | PostgreSQL 16 | Relational storage for permanent transaction history. |
 | **Vector DB** | Qdrant | Fast local vector index running alongside storage. |
 | **LLM** | Ollama (`gemma4:e2b`) | Lightweight, local inference engine optimizing performance. |
