@@ -38,8 +38,8 @@ class StatementChatTurn(BaseModel):
 
 class StatementChatRequest(BaseModel):
     cardholder_id: int = 1
-    message: str = Field(min_length=1, max_length=800)
-    history: List[StatementChatTurn] = Field(default_factory=list, max_length=10)
+    message: str = Field(min_length=1, max_length=8000)
+    history: List[StatementChatTurn] = Field(default_factory=list, max_length=200)
 
 
 @router.post("/import")
